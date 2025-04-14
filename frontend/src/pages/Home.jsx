@@ -15,7 +15,13 @@ import { useNavigate } from 'react-router-dom';
 import LiveTracking from '../components/LiveTracking';
 import logo from "../assets/logo.png"
 
+const center = {
+    lat: -3.745,
+    lng: -38.523
+};
+
 const Home = () => {
+    const [ currentPosition, setCurrentPosition ] = useState(center);
     const [ pickup, setPickup ] = useState('')
     const [ destination, setDestination ] = useState('')
     const [ panelOpen, setPanelOpen ] = useState(false)
@@ -44,6 +50,16 @@ const Home = () => {
     useEffect(() => {
         socket.emit("join", { userType: "user", userId: user._id })
     }, [ user ])
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const { latitude, longitude } = position.coords;
+            setCurrentPosition({
+                lat: latitude,
+                lng: longitude
+            });
+        });
+    }, [])
 
     socket.on('ride-confirmed', ride => {
 
@@ -167,12 +183,12 @@ const Home = () => {
     }, [ waitingForDriver ])
 
 
-    async function findTrip() {
-        setVehiclePanel(true)
-        setPanelOpen(false)
+    async function requestAmbulance() {
+        // setVehiclePanel(true)
+        // setPanelOpen(false)
 
         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-            params: { pickup, destination },
+            params: { currentPosition },
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -212,12 +228,12 @@ const Home = () => {
                     }} className='absolute opacity-0 right-6 top-6 text-2xl'>
                         <i className="ri-arrow-down-wide-line"></i>
                     </h5>
-                    <h4 className='text-2xl font-semibold'>Find a trip</h4>
+                    {/* <h4 className='text-2xl font-semibold'>Find a trip</h4> */}
                     <form className='relative py-3' onSubmit={(e) => {
                         submitHandler(e)
                     }}>
-                        <div className="line absolute h-16 w-1 top-[50%] -translate-y-1/2 left-5 bg-gray-700 rounded-full"></div>
-                        <input
+                        {/* <div className="line absolute h-16 w-1 top-[50%] -translate-y-1/2 left-5 bg-gray-700 rounded-full"></div> */}
+                        {/* <input
                             onClick={() => {
                                 setPanelOpen(true)
                                 setActiveField('pickup')
@@ -237,12 +253,12 @@ const Home = () => {
                             onChange={handleDestinationChange}
                             className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full  mt-3'
                             type="text"
-                            placeholder='Enter your destination' />
+                            placeholder='Enter your destination' /> */}
                     </form>
                     <button
-                        onClick={findTrip}
+                        onClick={requestAmbulance}
                         className='bg-black text-white px-4 py-2 rounded-lg mt-3 w-full'>
-                        Find Trip
+                        Request Ambulance
                     </button>
                 </div>
                 <div ref={panelRef} className='bg-white h-0'>
