@@ -39,7 +39,7 @@ const Home = () => {
     const [ destinationSuggestions, setDestinationSuggestions ] = useState([])
     const [ activeField, setActiveField ] = useState(null)
     const [ fare, setFare ] = useState({})
-    const [ vehicleType, setVehicleType ] = useState(null)
+    const [ vehicleType, setVehicleType ] = useState('car')
     const [ ride, setRide ] = useState(null)
 
     const navigate = useNavigate()
@@ -184,11 +184,12 @@ const Home = () => {
 
 
     async function requestAmbulance() {
-        // setVehiclePanel(true)
-        // setPanelOpen(false)
+        setConfirmRidePanel(true)
+        //  setVehiclePanel(true)
+        setPanelOpen(false)
 
         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-            params: { currentPosition },
+            params: { pickup, destination },
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -228,12 +229,12 @@ const Home = () => {
                     }} className='absolute opacity-0 right-6 top-6 text-2xl'>
                         <i className="ri-arrow-down-wide-line"></i>
                     </h5>
-                    {/* <h4 className='text-2xl font-semibold'>Find a trip</h4> */}
+                    <h4 className='text-2xl font-semibold'>Find a trip</h4>
                     <form className='relative py-3' onSubmit={(e) => {
                         submitHandler(e)
                     }}>
-                        {/* <div className="line absolute h-16 w-1 top-[50%] -translate-y-1/2 left-5 bg-gray-700 rounded-full"></div> */}
-                        {/* <input
+                        <div className="line absolute h-16 w-1 top-[50%] -translate-y-1/2 left-5 bg-gray-700 rounded-full"></div>
+                        <input
                             onClick={() => {
                                 setPanelOpen(true)
                                 setActiveField('pickup')
@@ -253,7 +254,7 @@ const Home = () => {
                             onChange={handleDestinationChange}
                             className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full  mt-3'
                             type="text"
-                            placeholder='Enter your destination' /> */}
+                            placeholder='Enter your destination' />
                     </form>
                     <button
                         onClick={requestAmbulance}
