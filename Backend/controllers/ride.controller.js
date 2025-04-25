@@ -66,10 +66,10 @@ module.exports.confirmRide = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { rideId } = req.body;
+    // const { rideId } = req.body.rideId;
 
     try {
-        const ride = await rideService.confirmRide({ rideId, captain: req.captain });
+        const ride = await rideService.confirmRide({ rideId: req.body.rideId, captain: req.body.captainId });
 
         sendMessageToSocketId(ride.user.socketId, {
             event: 'ride-confirmed',
@@ -114,10 +114,10 @@ module.exports.endRide = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { rideId } = req.body;
+    // const { rideId } = req.body;
 
     try {
-        const ride = await rideService.endRide({ rideId, captain: req.captain });
+        const ride = await rideService.endRide({ rideId: req.body.rideId });
 
         sendMessageToSocketId(ride.user.socketId, {
             event: 'ride-ended',
