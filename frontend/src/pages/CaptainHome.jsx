@@ -10,6 +10,7 @@ import { SocketContext } from '../context/SocketContext'
 import { CaptainDataContext } from '../context/CapatainContext'
 import axios from 'axios'
 import logo from '../assets/logo.png';
+import LiveTracking from '../components/LiveTracking'
 
 const CaptainHome = () => {
 
@@ -109,8 +110,7 @@ const CaptainHome = () => {
                 </Link>
             </div>
             <div className='h-3/5'>
-                <img className='h-full w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
-
+                <LiveTracking showDriverMarker={false} userId={captain?._id} />
             </div>
             <div className='h-2/5 p-6'>
                 <CaptainDetails />
